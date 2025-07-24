@@ -1,0 +1,123 @@
+package net.justmachinery.browsermonkey.ui
+
+import com.jme3.input.KeyInput
+import java.awt.event.KeyEvent
+
+val AWT_KEY_CODE_TO_JME = mutableMapOf<Int,Int>().apply {
+    this[KeyEvent.VK_ESCAPE] = KeyInput.KEY_ESCAPE
+    this[KeyEvent.VK_0] = KeyInput.KEY_0
+    this[KeyEvent.VK_1] = KeyInput.KEY_1
+    this[KeyEvent.VK_2] = KeyInput.KEY_2
+    this[KeyEvent.VK_3] = KeyInput.KEY_3
+    this[KeyEvent.VK_4] = KeyInput.KEY_4
+    this[KeyEvent.VK_5] = KeyInput.KEY_5
+    this[KeyEvent.VK_6] = KeyInput.KEY_6
+    this[KeyEvent.VK_7] = KeyInput.KEY_7
+    this[KeyEvent.VK_8] = KeyInput.KEY_8
+    this[KeyEvent.VK_9] = KeyInput.KEY_9
+    this[KeyEvent.VK_MINUS] = KeyInput.KEY_MINUS
+    this[KeyEvent.VK_EQUALS] = KeyInput.KEY_EQUALS
+    this[KeyEvent.VK_BACK_SPACE] = KeyInput.KEY_BACK
+    this[KeyEvent.VK_TAB] = KeyInput.KEY_TAB
+    this[KeyEvent.VK_Q] = KeyInput.KEY_Q
+    this[KeyEvent.VK_W] = KeyInput.KEY_W
+    this[KeyEvent.VK_E] = KeyInput.KEY_E
+    this[KeyEvent.VK_R] = KeyInput.KEY_R
+    this[KeyEvent.VK_T] = KeyInput.KEY_T
+    this[KeyEvent.VK_U] = KeyInput.KEY_U
+    this[KeyEvent.VK_I] = KeyInput.KEY_I
+    this[KeyEvent.VK_O] = KeyInput.KEY_O
+    this[KeyEvent.VK_P] = KeyInput.KEY_P
+    this[KeyEvent.VK_OPEN_BRACKET] = KeyInput.KEY_LBRACKET
+    this[KeyEvent.VK_CLOSE_BRACKET] = KeyInput.KEY_RBRACKET
+    this[KeyEvent.VK_ENTER] = KeyInput.KEY_RETURN
+    this[KeyEvent.VK_CONTROL] = KeyInput.KEY_LCONTROL
+    this[KeyEvent.VK_A] = KeyInput.KEY_A
+    this[KeyEvent.VK_S] = KeyInput.KEY_S
+    this[KeyEvent.VK_D] = KeyInput.KEY_D
+    this[KeyEvent.VK_F] = KeyInput.KEY_F
+    this[KeyEvent.VK_G] = KeyInput.KEY_G
+    this[KeyEvent.VK_H] = KeyInput.KEY_H
+    this[KeyEvent.VK_J] = KeyInput.KEY_J
+    this[KeyEvent.VK_Y] = KeyInput.KEY_Y
+    this[KeyEvent.VK_K] = KeyInput.KEY_K
+    this[KeyEvent.VK_L] = KeyInput.KEY_L
+    this[KeyEvent.VK_SEMICOLON] = KeyInput.KEY_SEMICOLON
+    this[KeyEvent.VK_QUOTE] = KeyInput.KEY_APOSTROPHE
+    this[KeyEvent.VK_DEAD_GRAVE] = KeyInput.KEY_GRAVE
+    this[KeyEvent.VK_SHIFT] = KeyInput.KEY_LSHIFT
+    this[KeyEvent.VK_BACK_SLASH] = KeyInput.KEY_BACKSLASH
+    this[KeyEvent.VK_Z] = KeyInput.KEY_Z
+    this[KeyEvent.VK_X] = KeyInput.KEY_X
+    this[KeyEvent.VK_C] = KeyInput.KEY_C
+    this[KeyEvent.VK_V] = KeyInput.KEY_V
+    this[KeyEvent.VK_B] = KeyInput.KEY_B
+    this[KeyEvent.VK_N] = KeyInput.KEY_N
+    this[KeyEvent.VK_M] = KeyInput.KEY_M
+    this[KeyEvent.VK_COMMA] = KeyInput.KEY_COMMA
+    this[KeyEvent.VK_PERIOD] = KeyInput.KEY_PERIOD
+    this[KeyEvent.VK_SLASH] = KeyInput.KEY_SLASH
+    this[KeyEvent.VK_MULTIPLY] = KeyInput.KEY_MULTIPLY
+    this[KeyEvent.VK_SPACE] = KeyInput.KEY_SPACE
+    this[KeyEvent.VK_CAPS_LOCK] = KeyInput.KEY_CAPITAL
+    this[KeyEvent.VK_F1] = KeyInput.KEY_F1
+    this[KeyEvent.VK_F2] = KeyInput.KEY_F2
+    this[KeyEvent.VK_F3] = KeyInput.KEY_F3
+    this[KeyEvent.VK_F4] = KeyInput.KEY_F4
+    this[KeyEvent.VK_F5] = KeyInput.KEY_F5
+    this[KeyEvent.VK_F6] = KeyInput.KEY_F6
+    this[KeyEvent.VK_F7] = KeyInput.KEY_F7
+    this[KeyEvent.VK_F8] = KeyInput.KEY_F8
+    this[KeyEvent.VK_F9] = KeyInput.KEY_F9
+    this[KeyEvent.VK_F10] = KeyInput.KEY_F10
+    this[KeyEvent.VK_NUM_LOCK] = KeyInput.KEY_NUMLOCK
+    this[KeyEvent.VK_SCROLL_LOCK] = KeyInput.KEY_SCROLL
+    this[KeyEvent.VK_NUMPAD7] = KeyInput.KEY_NUMPAD7
+    this[KeyEvent.VK_NUMPAD8] = KeyInput.KEY_NUMPAD8
+    this[KeyEvent.VK_NUMPAD9] = KeyInput.KEY_NUMPAD9
+    this[KeyEvent.VK_SUBTRACT] = KeyInput.KEY_SUBTRACT
+    this[KeyEvent.VK_NUMPAD4] = KeyInput.KEY_NUMPAD4
+    this[KeyEvent.VK_NUMPAD5] = KeyInput.KEY_NUMPAD5
+    this[KeyEvent.VK_NUMPAD6] = KeyInput.KEY_NUMPAD6
+    this[KeyEvent.VK_ADD] = KeyInput.KEY_ADD
+    this[KeyEvent.VK_NUMPAD1] = KeyInput.KEY_NUMPAD1
+    this[KeyEvent.VK_NUMPAD2] = KeyInput.KEY_NUMPAD2
+    this[KeyEvent.VK_NUMPAD3] = KeyInput.KEY_NUMPAD3
+    this[KeyEvent.VK_NUMPAD0] = KeyInput.KEY_NUMPAD0
+    this[KeyEvent.VK_DECIMAL] = KeyInput.KEY_DECIMAL
+    this[KeyEvent.VK_F11] = KeyInput.KEY_F11
+    this[KeyEvent.VK_F12] = KeyInput.KEY_F12
+    this[KeyEvent.VK_F13] = KeyInput.KEY_F13
+    this[KeyEvent.VK_F14] = KeyInput.KEY_F14
+    this[KeyEvent.VK_F15] = KeyInput.KEY_F15
+    this[KeyEvent.VK_KANA] = KeyInput.KEY_KANA
+    this[KeyEvent.VK_CONVERT] = KeyInput.KEY_CONVERT
+    this[KeyEvent.VK_NONCONVERT] = KeyInput.KEY_NOCONVERT
+    this[KeyEvent.VK_CIRCUMFLEX] = KeyInput.KEY_CIRCUMFLEX
+    this[KeyEvent.VK_AT] = KeyInput.KEY_AT
+    this[KeyEvent.VK_COLON] = KeyInput.KEY_COLON
+    this[KeyEvent.VK_UNDERSCORE] = KeyInput.KEY_UNDERLINE
+    this[KeyEvent.VK_STOP] = KeyInput.KEY_STOP
+    this[KeyEvent.VK_DIVIDE] = KeyInput.KEY_DIVIDE
+    this[KeyEvent.VK_PAUSE] = KeyInput.KEY_PAUSE
+    this[KeyEvent.VK_HOME] = KeyInput.KEY_HOME
+    this[KeyEvent.VK_UP] = KeyInput.KEY_UP
+    this[KeyEvent.VK_PAGE_UP] = KeyInput.KEY_PRIOR
+    this[KeyEvent.VK_LEFT] = KeyInput.KEY_LEFT
+    this[KeyEvent.VK_RIGHT] = KeyInput.KEY_RIGHT
+    this[KeyEvent.VK_END] = KeyInput.KEY_END
+    this[KeyEvent.VK_DOWN] = KeyInput.KEY_DOWN
+    this[KeyEvent.VK_PAGE_DOWN] = KeyInput.KEY_NEXT
+    this[KeyEvent.VK_INSERT] = KeyInput.KEY_INSERT
+    this[KeyEvent.VK_DELETE] = KeyInput.KEY_DELETE
+    this[KeyEvent.VK_ALT] = KeyInput.KEY_LMENU
+    this[KeyEvent.VK_META] = KeyInput.KEY_RCONTROL
+}
+val JME_KEY_CODE_TO_AWT = mutableMapOf<Int,Int>().apply {
+    AWT_KEY_CODE_TO_JME.entries.forEach { (k, v) ->
+        require(!this.contains(v))
+        this[v] = k
+    }
+}
+
+fun jmeKeyCodeToAwt(jmeCode : Int) = JME_KEY_CODE_TO_AWT.getOrDefault(jmeCode, jmeCode)
