@@ -61,7 +61,7 @@ fun main() {
 }
 
 // Helper function to compute area of the union of rectangles
-fun computeUnionArea(rectangles: List<Rectangle>): Int {
+private fun computeUnionArea(rectangles: List<Rectangle>): Int {
     if (rectangles.isEmpty()) return 0
 
     // For this simple test, we'll create a bitmap and count pixels
@@ -108,89 +108,40 @@ fun computeUnionArea(rectangles: List<Rectangle>): Int {
 
 
 fun mergeRectangles(rectangles: Sequence<Rectangle>): List<Rectangle> {
-    // Create events for rectangle boundaries
     data class Event(val x: Int, val rect: Rectangle, val isStart: Boolean)
-    val events = mutableListOf<Event>()
 
-    for (rect in rectangles) {
-        events.add(Event(rect.x, rect, true))
-        events.add(Event(rect.x + rect.width, rect, false))
-    }
+    val events = rectangles.flatMap { rect ->
+        listOf(Event(rect.x, rect, true), Event(rect.x + rect.width, rect, false))
+    }.sortedBy { it.x }.toList()
 
-    if(events.isEmpty()){ return emptyList() }
+    if (events.isEmpty()) return emptyList()
 
-    // Sort events by x-coordinate
-    events.sortBy { it.x }
-
-    // Active rectangles (those that intersect the current sweep line)
-    val active = mutableListOf<Rectangle>()
-
-    // Result rectangles
+    val active = mutableSetOf<Rectangle>()
     val result = mutableListOf<Rectangle>()
-
     var lastX = events.first().x
 
     for (event in events) {
-        val currentX = event.x
-
-        // Process segments between events
-        if (currentX > lastX && active.isNotEmpty()) {
-            // Find y-ranges covered by active rectangles
-            val yRanges = mutableListOf<IntRange>()
-
-            for (rect in active) {
-                val yStart = rect.y
-                val yEnd = rect.y + rect.height
-
-                // Merge with existing ranges if overlapping
-                var merged = false
-                for (i in yRanges.indices) {
-                    val range = yRanges[i]
-
-                    // Check for overlap or adjacency
-                    if (!(yEnd < range.first || yStart > range.last)) {
-                        // Merge ranges
-                        yRanges[i] = minOf(yStart,
-                            range.first)..maxOf(yEnd, range.last)
-                        merged = true
-                        break
-                    }
-                }
-
-                if (!merged) {
-                    yRanges.add(yStart..yEnd)
-                }
-
-                // Merge adjacent or overlapping ranges
-                var i = 0
-                while (i < yRanges.size - 1) {
-                    val r1 = yRanges[i]
-                    val r2 = yRanges[i + 1]
-
-                    if (r1.last >= r2.first - 1) {
-                        yRanges[i] = r1.first..maxOf(r1.last, r2.last)
-                        yRanges.removeAt(i + 1)
+        if (event.x > lastX && active.isNotEmpty()) {
+            val yRanges = active
+                .asSequence()
+                .map { it.y .. (it.y + it.height) }
+                .sortedBy { it.first }
+                .fold(mutableListOf<IntRange>()) { acc, range ->
+                    if (acc.isEmpty() || acc.last().last < range.first) {
+                        acc.add(range)
                     } else {
-                        i++
+                        acc[acc.lastIndex] = acc.last().first..maxOf(acc.last().last, range.last)
                     }
+                    acc
                 }
-            }
 
-            // Create rectangles from segments
-            for (range in yRanges) {
-                result.add(Rectangle(lastX, range.first, currentX - lastX,
-                    range.last - range.first))
+            yRanges.forEach { range ->
+                result.add(Rectangle(lastX, range.first, event.x - lastX, range.last - range.first))
             }
         }
 
-        // Update active rectangles
-        if (event.isStart) {
-            active.add(event.rect)
-        } else {
-            active.remove(event.rect)
-        }
-
-        lastX = currentX
+        if (event.isStart) active.add(event.rect) else active.remove(event.rect)
+        lastX = event.x
     }
 
     return result

@@ -1,5 +1,8 @@
+@file:Suppress("PackageDirectoryMismatch")
+
 package org.cef.browser;
 
+import org.apache.commons.lang3.reflect.FieldUtils
 import org.cef.CefBrowserSettings
 import org.cef.CefClient
 import org.cef.callback.CefDragData
@@ -41,7 +44,6 @@ data class CefBrowserInitData(
     val initialWidth: Int,
     val initialHeight : Int,
     val client: CefClient,
-    val currentUrl: String,
     val isTransparent: Boolean,
     val context: CefRequestContext?,
     val inspectAt: Point?,
@@ -70,10 +72,17 @@ interface ProxiedCefBrowserCallbacks {
 private class ProxiedCefBrowser(
     init : CefBrowserInitData,
     private val control: ProxiedCefBrowserCallbacks,
-) : CefBrowser_N(init.client, init.currentUrl, init.context, null, init.inspectAt, init.settings), CefRenderHandler {
+) : CefBrowser_N(init.client, "about:blank", init.context, null, init.inspectAt, init.settings), CefRenderHandler {
     private val settings = init.settings
     init {
-        createBrowser(this.client, 0, init.currentUrl, true, init.isTransparent, null, init.context)
+        createBrowser(this.client, 0, "about:blank", true, init.isTransparent, null, init.context)
+        //Okay, but it's not ACTUALLY CREATED until CEF sets the pending flag.
+        while(true){
+            if(FieldUtils.readField(this, "isPending_", true) == true){
+                break
+            }
+            Thread.sleep(1)
+        }
     }
 
     private val dummy = DummyComponent()
@@ -151,4 +160,12 @@ private class ProxiedCefBrowser(
     override fun addOnPaintListener(listener: Consumer<CefPaintEvent>?) = throw NotImplementedError()
     override fun setOnPaintListener(listener: Consumer<CefPaintEvent>?)  = throw NotImplementedError()
     override fun removeOnPaintListener(listener: Consumer<CefPaintEvent>?) = throw NotImplementedError()
+
+    override fun setFocus(enable: Boolean) {
+        //See https://github.com/chromiumembedded/java-cef/issues/489#issuecomment-2835464454
+    }
+
+    override fun isLoading(): Boolean {
+        return super.isLoading()
+    }
 }

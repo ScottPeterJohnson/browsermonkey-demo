@@ -23,9 +23,9 @@ import kotlinx.html.HtmlBlockTag
 import kotlinx.html.button
 import kotlinx.html.div
 import net.justmachinery.browsermonkey.ui.BrowserOverlayInputListener
-import net.justmachinery.browsermonkey.ui.BrowserOverlayUi
 import net.justmachinery.browsermonkey.ui.BrowserOverlayUiWebserver
 import net.justmachinery.browsermonkey.ui.UiToRender
+import net.justmachinery.feral.client.ui.browser.BrowserOverlayUi
 import net.justmachinery.shade.component.Component
 import net.justmachinery.shade.component.MountingContext
 import net.justmachinery.shade.state.observable
@@ -101,17 +101,16 @@ class Main : SimpleApplication() {
 
     override fun reshape(w: Int, h: Int) {
         super.reshape(w, h)
-        ui.onWindowSizeChange(w, h)
+        ui.onWindowSizeChange()
     }
 
     override fun simpleUpdate(tpf: Float) {
-        ui.render(tpf)
+        ui.frameUpdate()
     }
 
     override fun destroy() {
         super.destroy()
         webserver.destroy()
-        ui.destroy()
         System.exit(0) //TODO: For some reason, can't shut down the AWT threads?
     }
 }
@@ -146,8 +145,8 @@ class MainUi : Component<MainUi.Props>() {
                 withStyle {
                     declarations["grid-area"] = "3 / 2 / 4 / 3"
                     backgroundColor = Color("#282828").changeAlpha(0.9)
-                    border = "1px solid black"
-                    padding = "5px"
+                    border = Border(width = 1.px, style = BorderStyle.solid, color = Color.black)
+                    padding = Padding(5.px)
                     color = Color.whiteSmoke
                     overflow = Overflow.hidden
                     maxWidth = 20.vw

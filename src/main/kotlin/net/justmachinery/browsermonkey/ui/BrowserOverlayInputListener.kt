@@ -8,6 +8,9 @@ import kotlinx.html.DIV
 import kotlinx.html.HtmlBlockTag
 import kotlinx.html.classes
 import kotlinx.serialization.Serializable
+import net.justmachinery.feral.client.ui.browser.JMonkeyCefBrowser
+import net.justmachinery.feral.client.ui.browser.flexRow
+import net.justmachinery.feral.client.ui.browser.json
 import net.justmachinery.shade.component.Component
 import net.justmachinery.shade.component.MountingContext
 
@@ -47,7 +50,7 @@ class BrowserOverlayInputListener(
         }
     }
     fun clickInRects(x : Int, y : Int, forScroll : Boolean) : Boolean {
-        val yOff = browser.browserRect.height
+        val yOff = application.camera.height
         for(rect in browserClickRects.values){
             if(forScroll && !rect.captureScroll){ continue }
             val browserY = yOff - y
@@ -62,7 +65,7 @@ class BrowserOverlayInputListener(
             if(change.newRect == null){
                 browserClickRects.remove(change.targetId)
             } else {
-                browserClickRects.put(change.targetId, change.newRect)
+                browserClickRects[change.targetId] = change.newRect
             }
         }
     }
@@ -84,7 +87,7 @@ class InputRectListener : Component<InputRectListener.Props>() {
     private fun pumpClickRectReports(){
         launch {
             while(true){
-                val report = client.runWithCallback("window.registerReportCallback(shadeCb)").await()
+                val report = client.runWithCallback("window.registerReportCallback ? window.registerReportCallback(shadeCb) : shadeCb([])").await()
                 val changes = json.decodeFromString<List<ClickRectChange>>(report.raw)
                 props.browserOverlayInputListener.onRectChanges(changes)
             }

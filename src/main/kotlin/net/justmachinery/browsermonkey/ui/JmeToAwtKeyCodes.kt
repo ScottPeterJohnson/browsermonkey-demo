@@ -1,4 +1,4 @@
-package net.justmachinery.browsermonkey.ui
+package net.justmachinery.feral.client.ui.browser
 
 import com.jme3.input.KeyInput
 import java.awt.event.KeyEvent
